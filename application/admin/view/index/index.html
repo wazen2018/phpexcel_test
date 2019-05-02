@@ -52,7 +52,7 @@
                 <dl class="layui-nav-child">
                     <dd><a href="javascript:;" href-url="__ADMIN__/demo/login.html"><i class="layui-icon">&#xe621;</i>登录页</a></dd>
                     <dd><a href="javascript:;" href-url="__ADMIN__/demo/map.html"><i class="layui-icon">&#xe621;</i>图表</a></dd>
-                    <dd><a href="/"><i class="layui-icon">&#x1006;</i>退出</a></dd>
+                    <dd><a href="{:url('login/logout')}"><i class="layui-icon">&#x1006;</i>退出</a></dd>
                 </dl>
             </li>
         </ul>
@@ -92,6 +92,14 @@
                     </dl>
                 </li>
                 <li class="layui-nav-item">
+
+                        <a href="javascript:;">
+                                <i class="layui-icon">&#xe653;</i>安全中心</a>
+                            <dl class="layui-nav-child">
+                                <dd><a href="javascript:;" href-url="{:url('index/modify')}"><i class="layui-icon">&#xe673;</i>密码修改</a></dd>
+                               
+                            </dl>
+                </li>
 				
 
             </ul>
@@ -113,8 +121,8 @@
     </div>
     <!-- footer -->
     <div class="layui-footer my-footer">
-        <p><a href="#" target="_blank">内部资产后台</a>&nbsp;&nbsp;&&nbsp;&nbsp;<a href="http://vip-admin.com/index/gather/index.html" target="_blank">vip-admin管理系统v1.2.0</a></p>
-        <p>2017 © copyright </p>
+        <p><a href="#" target="_blank">内部资产后台</a>&nbsp;&nbsp;&&nbsp;&nbsp;<a href="#" target="_blank">内部资产管理系统v0.1</a></p>
+        <p>2019 © copyright </p>
     </div>
 </div>
 

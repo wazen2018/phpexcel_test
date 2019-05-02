@@ -26,7 +26,7 @@ class Login extends Controller
 		$data=input('post.');
 		
 		$validate=validate('Manager');
-		if (!$validate->check($data)) {
+		if (!$validate->scene('login')->check($data)) {
 			
 			 $this->error($validate->getError(),null,null,2);
 		}	
@@ -56,6 +56,11 @@ class Login extends Controller
 		return ;
 		
 	}
+
+	public function logout(){
+		session(null,'admin');
+		$this->success('正在退出','login/index');
+}
 }
 /*
 
