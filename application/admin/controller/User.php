@@ -20,9 +20,14 @@ class User extends Common
 		if(request()->isPost())
 		{
 			$data=input('post.');
-			dump($data);
-			$result=db('user')->insert($data);
+			//dump($data);
+			$validate=validate('User');
+			if(!$validate->scene('add')->check($data))
+			{
+				$this->error($validate->getError());
+			}
 			
+			$result=db('user')->insert($data);
 			$this->success("添加成功",'user/index');
 			return;
 		}

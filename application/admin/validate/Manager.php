@@ -10,7 +10,7 @@ class Manager extends Validate
     'oldpassword'   => 'require|min:6',
     'password2'   => 'confirm:password',
 	];
-  protected $msg = [
+  protected $message = [
     'username.require' => '用户名不能为空',
     'username.max'     => '用户名最多不能超过25个字符',
   	'username.min'     => '用户名最少6个字符',
