@@ -19,6 +19,7 @@ class Common extends Controller
 		
 	}
 	
+	
     public function index()
     {
         return view();
