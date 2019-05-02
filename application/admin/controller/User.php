@@ -37,8 +37,42 @@ class User extends Common
 	
 	//编辑员工信息
 	 public function edit()
-	{
-	    return view();
+	{ 
+		//提交按钮 
+		if(request()->isPost()){
+			$data=input('post.');
+			//dump($data);
+
+			//编辑验证
+			$validate=validate('User');
+			if(!$validate->scene('edit')->check($data))
+			{
+				$this->error($validate->getError());
+			}
+			//dump($data);die;
+			//更新数据
+			if(db('user')->update($data)){
+				$this->success("更改成功！",'user/index');
+			}else{
+				$this->error('更改失败！');
+			}
+
+			return;
+		}
+
+		//从员工列表过来 带着id
+		$id=input('id');
+		
+		$res=db('user')->where('id',$id)->find();
+		//dump($res);
+		if(!$res){
+			$this->error("该用户id异常！");
+		}
+		$this->assign('user',$res);
+			
+		
+		return view();
+	    
 	}
 	
 	//批量导入员工信息
