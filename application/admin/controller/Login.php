@@ -11,13 +11,16 @@ class Login extends Controller
 {
     public function index()
     {
-        return view();
-    }
-	
-	public function test()
-	{
-		echo "test";
+		if(session('?loginname','','admin')!=1 || session('?loginid','','admin')!=1)
+		{
+			return view();
 		}
+		else
+		  $this->redirect('index/index');
+		  
+        
+    }
+
 	public function login()
 	{
 		$data=input('post.');

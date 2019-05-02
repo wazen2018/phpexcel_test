@@ -10,6 +10,7 @@ class User extends Common
 		 $result=db('user')->order('id desc')->select();
 		 $this->assign('list',$result);
 		// dump($result);
+		
         return view();
     }
 	//手动员工新增
