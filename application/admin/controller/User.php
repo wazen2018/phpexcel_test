@@ -7,7 +7,7 @@ class User extends Common
 	
     public function index()
     {
-		 $result=db('user')->order('id desc')->select();
+		 $result=db('user')->where('state',1)->order('id desc')->select();
 		 $this->assign('list',$result);
 		// dump($result);
 		
@@ -75,9 +75,24 @@ class User extends Common
 	    
 	}
 	
+	//软删除
+	public function del(){
+		$id=input('id');
+		//echo ":ID=".$id;
+		if(db('user')->where('id',$id)->setField('state',0)){
+			$this->success("已删除！",'user/index');
+		}else{
+			$this->error('删除失败！');
+		}		
+		return ;//view();
+	}
+
 	//批量导入员工信息
-	public function groupadd()
+	public function upload()
 	{
+		if(request()->isPost()){
+			return js_encode("处理成功");
+		}
 	    return view();
 	}
 	

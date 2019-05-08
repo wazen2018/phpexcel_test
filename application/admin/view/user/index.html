@@ -14,7 +14,8 @@
 
 
 <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
-    <legend>员工列表 <a href="{:url('user/add')}" class="layui-btn layui-btn-small">添加员工</a></legend>
+    <legend>员工列表 <a href="{:url('user/add')}" class="layui-btn layui-btn-small">添加员工</a>
+	 <a href="{:url('user/upload')}" class="layui-btn layui-btn-small layui-btn-warm">批量添加员工</a></legend>
 	
 </fieldset>
 
@@ -59,7 +60,7 @@
         <td>{$vo.state}</td>
 		<td>
 			<a href="{:url('user/edit',array('id'=>$vo.id))}" class="layui-btn layui-btn-small layui-btn-warm">编辑</a>
-			<a href="" class="layui-btn layui-btn-small layui-btn-danger">删除</a>		
+			<a href="javascript:void();" class="layui-btn layui-btn-small layui-btn-danger del" data="{$vo.id}">删除</a>		
 		
 		</td>
     </tr>
@@ -69,11 +70,27 @@
 </table>
 
 
-
-<script type="text/javascript" src="__ADMIN__/layui/layui.js"></script>
+<script src="__STATIC__/common/js/jquerymin.js"></script>
+<script src="__ADMIN__/layui/layui.js"></script>
 <script type="text/javascript">
     // you code ...
+    
 
+layui.use('layer', function(){
+  var layer = layui.layer;
+  $('.del').on('click',function(){
+        var id=$(this).attr('data');
+        
+        layer.confirm('确定删除?', {icon: 3, title:'友情提示'}, function(index){
+        //do something
+        // layer.msg(id);
+        location.href="{:url('user/del')}?id="+id;
+         layer.close(index);
+        });
+
+    })
+  
+});    
 
 </script>
 </body>
