@@ -1,2 +1,6 @@
-*
 !.gitignore
+!PHPExcel/
+composer
+topthink
+workerman
+autoload.php

@@ -1,7 +1,9 @@
 <?php
 namespace app\admin\controller;
-use think\Request;
+//use think\Request;
 use think\File;
+use PHPExcel;
+use PHPExcel_IOFactory;
 
 class User extends Common
 {
@@ -93,24 +95,33 @@ class User extends Common
 	public function upload()
 	{
 		if(request()->isPost()){
+		   
+			
 		 // 获取表单上传文件 例如上传了001.jpg
-		 $file = request()->file('image');
-    
+		 $file = request()->file('excelfile');
+		 
 		 // 移动到框架应用根目录/public/uploads/ 目录下
 		 if($file){
+			
 			 $info = $file->validate(['size'=>10485760,'ext'=>'xls,xlsx'])->move(ROOT_PATH . 'public' . DS . 'uploads');
 			 if($info){
 				 // 成功上传后 获取上传信息
-				 // 输出 jpg
-				 echo "上传成功<br>";
-				 echo $info->getExtension()."<br>";
+				
+				//return  json_encode($info->getSaveName());
+								 
 				 // 输出 20160820/42a79759f284b767dfcb2a0197904287.jpg
-				 echo $info->getSaveName()."<br>";
-				 // 输出 42a79759f284b767dfcb2a0197904287.jpg
-				 echo $info->getFilename(); 
+				 $fullfilename=ROOT_PATH . 'public' . DS . 'uploads'.DS.$info->getSaveName();
+				//echo json_encode($filename);
+				Phpexceljob($fullfilename);
+				
+
+
+
+				// echo $excelFileType;
+				 
 			 }else{
 				 // 上传失败获取错误信息
-				 echo $file->getError();
+				 echo  $file->getError();
 			 }
 		 }
 		}
@@ -120,6 +131,27 @@ class User extends Common
 
 
 		
+	}
+
+	protected function Phpexceljob($fullfilename){
+
+		vendor("PHPExcel.PHPExcel.IOFactory");
+		$excelFileType = \PHPExcel_IOFactory::identify($fullfilename);
+		$objReader=\PHPExcel_IOFactory::createReader($excelFileType);
+		$objPHPExcel=$objReader->load($fullfilename);
+		$sheet=$objPHPExcel->getSheet(0);
+
+		// 获取表格数量
+		$sheetCount = $sheet->getSheetCount();
+		// 获取行数
+		$rows = $sheet->getHighestRow();
+		// 获取col count
+		$col = $sheet->getHighestColumn();
+		
+		$cols=\PHPExcel_Cell::columnIndexFromString($col);
+
+
+	
 	}
 	
 }
