@@ -2,7 +2,7 @@
 namespace app\admin\controller;
 //use think\Request;
 use think\File;
-use PHPExcel;
+//use PHPExcel;
 use PHPExcel_IOFactory;
 
 class User extends Common
@@ -11,11 +11,11 @@ class User extends Common
 	
     public function index()
     {
-		 $result=db('user')->where('state',1)->order('id desc')->select();
+		 $result=db('user')->where('state',1)->order('id desc')->paginate(10);
 		 $this->assign('list',$result);
 		// dump($result);
 		
-        return view();
+        return view();	
     }
 	//手动员工新增
 	 public function add()
@@ -24,11 +24,11 @@ class User extends Common
 		if(request()->isPost())
 		{
 			$data=input('post.');
-			//dump($data);
-			$validate=validate('User');
-			if(!$validate->scene('add')->check($data))
+			dump($data);die;
+			$valdt=validate('User');
+			if(!$valdt->scene('add')->check($data))
 			{
-				$this->error($validate->getError());
+				$this->error($valdt->getError());
 			}
 			
 			$result=db('user')->insert($data);
@@ -112,11 +112,17 @@ class User extends Common
 				 // 输出 20160820/42a79759f284b767dfcb2a0197904287.jpg
 				 $fullfilename=ROOT_PATH . 'public' . DS . 'uploads'.DS.$info->getSaveName();
 				//echo json_encode($filename);
-				Phpexceljob($fullfilename);
+				$res=$this->Phpexceljob($fullfilename);	
+				if($res==1){
+					if(file_exists($fullfilename)){
+						unset($info);//释放占用
+						unlink($fullfilename);
+					}
+					echo "数据上传成功！";
+				}else{
+					echo "数据上传异常！";
+				}
 				
-
-
-
 				// echo $excelFileType;
 				 
 			 }else{
@@ -126,30 +132,60 @@ class User extends Common
 		 }
 		}
 		
-		return view();
-		
+		return view();	
 
 
 		
 	}
 
-	protected function Phpexceljob($fullfilename){
+	 protected function Phpexceljob($fullfilename){
 
 		vendor("PHPExcel.PHPExcel.IOFactory");
+		//vendor("PHPExcel.PHPExcel.PHPExcel");
+		//vendor("PHPExcel.PHPExcel.Writer.Excel5");
+		//vendor("PHPExcel.PHPExcel.Writer.Excel2007");
+
 		$excelFileType = \PHPExcel_IOFactory::identify($fullfilename);
 		$objReader=\PHPExcel_IOFactory::createReader($excelFileType);
 		$objPHPExcel=$objReader->load($fullfilename);
 		$sheet=$objPHPExcel->getSheet(0);
 
 		// 获取表格数量
-		$sheetCount = $sheet->getSheetCount();
-		// 获取行数
+		//$sheetCount = $sheet->getSheetCount();
+		// 获取最大行数
 		$rows = $sheet->getHighestRow();
-		// 获取col count
+		// 获取最大列数 字母列 比如 F
 		$col = $sheet->getHighestColumn();
-		
+		//将字母转换为第几列  比如F转换成6
 		$cols=\PHPExcel_Cell::columnIndexFromString($col);
 
+		$field=['name','age','sex','phone','birthday','qq','wx'];
+		$data=[];
+		for($r=2;$r<=$rows;$r++){
+
+			$rowdata=[];
+			for($cl=0;$cl<$cols;$cl++){
+				$val=$sheet->getCellByColumnAndRow($cl,$r)->getValue();
+				//转换数字
+				if($field[$cl]=="sex"){
+					$val=($val=="男")?1:0;
+				}
+				$rowdata[$field[$cl]]=$val;
+			}
+			$data[]=$rowdata;
+		}
+		//dump($data);die;
+				
+		//tp5 批量插入
+		if(db('user')->insertAll($data)){
+			
+			
+			return 1;
+			
+		}
+		else{
+			return 0;
+		}	
 
 	
 	}

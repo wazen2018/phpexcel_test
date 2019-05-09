@@ -65,7 +65,10 @@
 		</td>
     </tr>
    {/volist}
-   
+   <tr>
+        <td colspan="10">{$list->render()}</td>
+   </tr>
+  
     </tbody>
 </table>
 
@@ -74,10 +77,10 @@
 <script src="__ADMIN__/layui/layui.js"></script>
 <script type="text/javascript">
     // you code ...
-    
 
-layui.use('layer', function(){
+layui.use('laypage','layer', function(){
   var layer = layui.layer;
+  var laypage = layui.laypage
   $('.del').on('click',function(){
         var id=$(this).attr('data');
         
@@ -89,8 +92,22 @@ layui.use('layer', function(){
         });
 
     })
+
+    /*
+    laypage.render({
+    elem: 'demo1'
+    ,count: 70 //数据总数
+    ,jump: function(obj){
+      console.log(obj)
+    }
+   });
+   */
   
+    
 });    
+
+
+  
 
 </script>
 </body>
