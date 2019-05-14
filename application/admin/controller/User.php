@@ -8,7 +8,7 @@ use PHPExcel_IOFactory;
 class User extends Common
 {
 	//员工列表
-	
+
     public function index()
     {
 		 $result=db('user')->where('state',1)->order('id desc')->paginate(10);
